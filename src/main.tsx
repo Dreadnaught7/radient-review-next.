@@ -5,7 +5,14 @@ import './styles.css';
 
 type Post = { category: string; title: string; excerpt: string; url: string; tone: string };
 const leadTitle = 'Google Is Putting AI Agents Inside Finance. Who Audits the Agent?';
-const fallbackPosts: Post[] = [{ category: 'Technology', title: leadTitle, excerpt: 'Google is moving AI agents into financial workflows, raising a harder question about oversight, accountability, and who verifies the systems doing the work.', url: 'https://theradientreview.com/?s=Google+Is+Putting+AI+Agents+Inside+Finance', tone: 'violet' }];
+const fallbackPosts: Post[] = [
+  { category: 'Technology', title: leadTitle, excerpt: 'Google is moving AI agents into financial workflows, raising a harder question about oversight, accountability, and who verifies the systems doing the work.', url: 'https://theradientreview.com/?s=Google+Is+Putting+AI+Agents+Inside+Finance', tone: 'violet' },
+  { category: 'Technology', title: 'AI Is Learning to Act on Your Behalf. Consent Has Not Caught Up.', excerpt: 'Agentic systems promise to handle more decisions for us, but delegation is not the same thing as informed consent or meaningful control.', url: 'https://theradientreview.com/?s=AI+Is+Learning+to+Act+on+Your+Behalf', tone: 'cyan' },
+  { category: 'Markets', title: 'The Market Is Pricing the AI Boom. Who Is Pricing the Risk?', excerpt: 'The investment case for artificial intelligence is moving faster than the evidence about its costs, dependencies, and uneven returns.', url: 'https://theradientreview.com/?s=The+Market+Is+Pricing+the+AI+Boom', tone: 'gold' },
+  { category: 'Public Systems', title: 'When Government Buys AI, the Public Inherits the Black Box', excerpt: 'Automated public services can scale decisions quickly while making it harder for the people affected by them to see or challenge the reasoning.', url: 'https://theradientreview.com/?s=When+Government+Buys+AI', tone: 'teal' },
+  { category: 'Culture', title: 'The Feed Knows What Holds Your Attention. That Is Not the Same as Knowing You.', excerpt: 'Recommendation systems are optimized around measurable behavior, leaving identity, intent, and context outside the frame.', url: 'https://theradientreview.com/?s=The+Feed+Knows+What+Holds+Your+Attention', tone: 'violet' },
+  { category: 'Technology', title: 'The Cloud Was Supposed to Simplify Everything. It Changed Who Holds the Leverage.', excerpt: 'Cloud infrastructure made computing easier to access while concentrating important choices about cost, resilience, and control.', url: 'https://theradientreview.com/?s=The+Cloud+Was+Supposed+to+Simplify+Everything', tone: 'cyan' },
+];
 const topics = [
   ['Technology', 'AI, infrastructure, platforms and systems'], ['Markets', 'Money, incentives, business and risk'],
   ['Culture', 'Media, sports, behavior and identity'], ['Public Systems', 'Policy, institutions and operations'],
@@ -21,14 +28,14 @@ function App() {
   const searchInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    fetch('https://theradientreview.com/wp-json/wp/v2/posts?per_page=6&_embed=1')
+    fetch('https://public-api.wordpress.com/wp/v2/sites/theradientreview.com/posts?per_page=6&_embed=1')
       .then(response => response.ok ? response.json() : Promise.reject())
       .then((items: Array<any>) => {
         const tones = ['violet', 'cyan', 'gold', 'teal', 'violet', 'cyan'];
         const clean = (html: string) => new DOMParser().parseFromString(html, 'text/html').body.textContent?.trim() || '';
         const newest = items.map((item, index) => ({ category: item._embedded?.['wp:term']?.[0]?.[0]?.name || 'The Radient Review', title: clean(item.title.rendered), excerpt: clean(item.excerpt.rendered), url: item.link, tone: tones[index] }));
         newest.sort((a, b) => Number(b.title === leadTitle) - Number(a.title === leadTitle));
-        if (newest.length) setPosts(newest);
+        if (newest.length) setPosts([...newest, ...fallbackPosts.filter(fallback => !newest.some(post => post.title === fallback.title))].slice(0, 6));
       })
       .catch(() => { /* Keep the featured report usable when the publication is unavailable. */ });
   }, []);
