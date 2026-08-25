@@ -175,6 +175,10 @@ body{background:radial-gradient(circle at 20% 8%,rgba(25,93,130,.09),transparent
 .art-gold{--art-accent:#e7b85f}
 .art-teal{--art-accent:#48c9bd}
 .art-hero{--art-accent:#59e6e2}
+.art-photo{position:absolute;z-index:0;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.78) contrast(1.09) brightness(.66);transform:scale(1.015);transition:transform .8s cubic-bezier(.2,.7,.2,1),filter .6s ease}
+.art:has(.art-photo):before{content:"";position:absolute;z-index:1;inset:0;background:linear-gradient(135deg,rgba(5,8,13,.16),rgba(5,8,13,.42) 58%,rgba(5,8,13,.75)),linear-gradient(0deg,color-mix(in srgb,var(--art-accent) 17%,transparent),transparent 55%)}
+.art:has(.art-photo)>i{opacity:.48;mix-blend-mode:screen}
+.art:has(.art-photo):hover .art-photo{transform:scale(1.055);filter:saturate(.92) contrast(1.08) brightness(.72)}
 .art-grid{position:absolute;z-index:0;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(135deg,rgba(0,0,0,.9),transparent 78%)}
 .art-orbit{position:absolute;z-index:2;right:-8%;top:8%;width:58%;aspect-ratio:1;border:1px solid color-mix(in srgb,var(--art-accent) 28%,transparent);border-radius:50%;animation:orbit-turn 24s linear infinite}
 .art-orbit:before,.art-orbit:after,.art-orbit b{content:"";position:absolute;border:1px solid color-mix(in srgb,var(--art-accent) 20%,transparent);border-radius:50%}
@@ -189,6 +193,7 @@ body{background:radial-gradient(circle at 20% 8%,rgba(25,93,130,.09),transparent
 .art-label,.art-code{position:absolute;z-index:4;text-transform:uppercase;font:9px 'IBM Plex Mono',monospace;letter-spacing:.18em}
 .art-label{left:20px;top:20px;padding:8px 10px;border:1px solid color-mix(in srgb,var(--art-accent) 35%,transparent);background:rgba(5,8,13,.58);color:#eef9f7;backdrop-filter:blur(7px)}
 .art-code{right:18px;bottom:16px;color:color-mix(in srgb,var(--art-accent) 72%,#fff)}
+.art-credit{position:absolute;z-index:4;left:18px;bottom:15px;max-width:62%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:rgba(255,255,255,.7);font:8px 'IBM Plex Mono',monospace;letter-spacing:.05em;text-shadow:0 1px 8px #000}
 .art>i{z-index:1}
 .hero-art:hover .art,.feature-card:hover>.art,.story:hover .art,.rail-card:hover .art{transform:scale(1.012);border-color:rgba(62,228,225,.2);box-shadow:0 22px 70px rgba(0,0,0,.28)}
 .resonance-band{position:relative;padding:28px 0;border-block:1px solid rgba(255,255,255,.07);background:linear-gradient(90deg,rgba(35,224,223,.035),rgba(123,83,239,.055),rgba(232,181,85,.035));overflow:hidden}
