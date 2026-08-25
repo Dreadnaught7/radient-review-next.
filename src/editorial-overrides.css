@@ -1,78 +1,84 @@
 /* Editorial density pass — Aug 25, 2026 */
 
-/* Use more of the viewport; the previous composition felt like a narrow blog floating in black space. */
+/* Use more of the viewport without creating giant empty panels. */
 .shell{width:min(1440px,calc(100% - 48px))}
 
-/* Interior/archive pages should feel like a publication, not a centered utility screen. */
-.interior{padding-top:42px;padding-bottom:72px}
-.interior-head{max-width:1040px;margin-bottom:32px}
-.interior-head h1{font-size:clamp(48px,5vw,76px);margin:12px 0 14px}
-.back-link{margin-bottom:24px}
+/* Interior/archive pages should feel like a dense publication. */
+.interior{padding-top:38px;padding-bottom:64px}
+.interior-head{max-width:1040px;margin-bottom:26px}
+.interior-head h1{font-size:clamp(46px,4.8vw,72px);margin:10px 0 12px}
+.back-link{margin-bottom:20px}
 
-/* Image-first archive. */
-.archive-grid{grid-template-columns:repeat(12,minmax(0,1fr));gap:24px}
-.archive-card{grid-column:span 4;padding:0 0 22px;border-bottom:1px solid rgba(255,255,255,.08)}
-.archive-card:nth-child(1),.archive-card:nth-child(7n+1){grid-column:span 8}
-.archive-card:nth-child(2),.archive-card:nth-child(7n+2){grid-column:span 4}
-.archive-card .art{min-height:300px;margin-bottom:16px;border-radius:14px}
-.archive-card:nth-child(1) .art,.archive-card:nth-child(7n+1) .art{min-height:430px}
-.archive-card h2{font-size:clamp(27px,2.2vw,38px);line-height:1.02;margin:9px 0 10px;max-width:95%}
-.archive-card>p{max-width:62ch;margin-bottom:12px}
+/* Dense archive: equal cards, no oversized feature wells. */
+.archive-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px 24px;align-items:start}
+.archive-card,.archive-card:nth-child(1),.archive-card:nth-child(7n+1),.archive-card:nth-child(2),.archive-card:nth-child(7n+2){grid-column:auto;padding:0 0 18px;border-bottom:1px solid rgba(255,255,255,.08)}
+.archive-card .art,.archive-card:nth-child(1) .art,.archive-card:nth-child(7n+1) .art{min-height:185px;height:185px;margin-bottom:13px;border-radius:10px}
+.archive-card h2{font-size:clamp(23px,1.65vw,30px);line-height:1.04;margin:8px 0 9px;max-width:100%}
+.archive-card a>p:not(.eyebrow){font-size:13px;line-height:1.5;margin:0 0 8px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.archive-card a>span{margin-top:5px}
+.archive-card .eyebrow{margin-top:0}
 
-/* Make photos dominant; resonance graphics become accents rather than hiding the subject. */
-.art-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;filter:saturate(.92) contrast(1.04);opacity:.92}
-.art:has(.art-photo):after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,5,8,.08) 30%,rgba(3,5,8,.74) 100%);pointer-events:none}
-.art:has(.art-photo) .art-grid{opacity:.15}
-.art:has(.art-photo) .art-orbit{opacity:.38}
-.art:has(.art-photo) .art-trace{opacity:.36}
-.art:has(.art-photo)>i{opacity:.26}
-.art-credit{z-index:6;max-width:72%;font-size:9px;background:rgba(2,5,8,.72);backdrop-filter:blur(5px)}
+/* If a card truly has no photo element, do not reserve a giant dark rectangle. */
+.archive-card .art:not(:has(.art-photo)){height:82px;min-height:82px}
+.archive-card .art:not(:has(.art-photo)) .art-orbit{opacity:.22}
+.archive-card .art:not(:has(.art-photo)) .art-trace{opacity:.3}
+
+/* Make photos dominant; resonance graphics are accents. */
+.art-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;filter:saturate(.98) contrast(1.04) brightness(.86);opacity:1}
+.art:has(.art-photo):after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,5,8,.02) 30%,rgba(3,5,8,.5) 100%);pointer-events:none}
+.art:has(.art-photo) .art-grid{opacity:.1}
+.art:has(.art-photo) .art-orbit{opacity:.26}
+.art:has(.art-photo) .art-trace{opacity:.3}
+.art:has(.art-photo)>i{opacity:.18}
+.art-credit{z-index:6;max-width:72%;font-size:8px;background:rgba(2,5,8,.62);backdrop-filter:blur(5px)}
 .art-label,.art-code{z-index:6}
 
 /* Report page: tighter, image-led magazine composition. */
 .report-document{width:min(1180px,100%)}
-.report-visual{margin:0 0 24px}
-.report-visual .art{min-height:560px;border-radius:18px}
+.report-visual{margin:0 0 20px}
+.report-visual .art{min-height:480px;border-radius:14px}
 .report-document>.eyebrow,.report-document>h1,.report-document>.article-deck{width:min(900px,calc(100% - 56px));margin-left:auto;margin-right:auto}
-.report-document>h1{font-size:clamp(50px,6vw,88px);line-height:.94;margin-top:12px;margin-bottom:18px}
-.article-deck{font-size:22px;line-height:1.38;margin-bottom:24px;padding-bottom:24px}
-.article-body{width:min(900px,calc(100% - 56px));margin:0 auto;font-size:17px;line-height:1.72;color:#d0d3d8}
-.article-body p,.article-body ul,.article-body ol{margin-bottom:18px}
-.article-body h2{font-size:38px;margin:38px 0 14px}
-.article-body h3{font-size:29px;margin:30px 0 12px}
+.report-document>h1{font-size:clamp(48px,5.6vw,82px);line-height:.95;margin-top:10px;margin-bottom:15px}
+.article-deck{font-size:21px;line-height:1.36;margin-bottom:20px;padding-bottom:20px}
+.article-body{width:min(900px,calc(100% - 56px));margin:0 auto;font-size:17px;line-height:1.68;color:#d0d3d8}
+.article-body p,.article-body ul,.article-body ol{margin-bottom:16px}
+.article-body h2{font-size:37px;margin:34px 0 12px}
+.article-body h3{font-size:28px;margin:27px 0 10px}
 
-/* Existing WordPress article media should render as strong editorial breaks. */
-.article-body figure,.article-body .wp-block-image{margin:26px -70px 30px;max-width:none}
-.article-body figure img,.article-body .wp-block-image img,.article-body>p>img{display:block;width:100%;max-height:620px;object-fit:cover;border-radius:14px}
+/* Existing WordPress article media render as editorial breaks. */
+.article-body figure,.article-body .wp-block-image{margin:22px -70px 24px;max-width:none}
+.article-body figure img,.article-body .wp-block-image img,.article-body>p>img{display:block;width:100%;max-height:560px;object-fit:cover;border-radius:12px}
 .article-body figcaption{font:10px/1.5 'IBM Plex Mono',monospace;color:#7f8995;margin-top:8px}
 
-/* Add visual density even when a source post contains no inline media. */
-.report-document .article-body:before{content:"";display:block;width:calc(100% + 140px);height:280px;margin:6px -70px 30px;border-radius:14px;background-image:linear-gradient(180deg,rgba(3,6,10,.08),rgba(3,6,10,.58)),url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Technician_with_laptop_working_on_server_rack_at_NERSC.jpg/1280px-Technician_with_laptop_working_on_server_rack_at_NERSC.jpg');background-size:cover;background-position:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}
-.report-document:has(.report-visual img[src*='Knicks']) .article-body:before,.report-document:has(.report-visual img[src*='Madison_Square_Garden']) .article-body:before{background-image:linear-gradient(180deg,rgba(3,6,10,.08),rgba(3,6,10,.58)),url('https://upload.wikimedia.org/wikipedia/commons/7/78/Knicks_playing_at_Madison_Square_Garden.jpg')}
-.report-document:has(.report-visual img[src*='Fort_Greene']) .article-body:before{background-image:linear-gradient(180deg,rgba(3,6,10,.08),rgba(3,6,10,.58)),url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Fort_Greene_Parkhouse_jeh.JPG/1280px-Fort_Greene_Parkhouse_jeh.JPG')}
-.report-document:has(.report-visual img[src*='Stock_Exchange']) .article-body:before{background-image:linear-gradient(180deg,rgba(3,6,10,.08),rgba(3,6,10,.58)),url('https://upload.wikimedia.org/wikipedia/commons/0/03/Floor_of_Toronto_Stock_Exchange_1956.jpg')}
+/* Fallback visual break stays useful but smaller. */
+.report-document .article-body:before{content:"";display:block;width:calc(100% + 140px);height:220px;margin:4px -70px 24px;border-radius:12px;background-image:linear-gradient(180deg,rgba(3,6,10,.05),rgba(3,6,10,.48)),url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Technician_with_laptop_working_on_server_rack_at_NERSC.jpg/1280px-Technician_with_laptop_working_on_server_rack_at_NERSC.jpg');background-size:cover;background-position:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}
+.report-document:has(.report-visual img[src*='Knicks']) .article-body:before,.report-document:has(.report-visual img[src*='Madison_Square_Garden']) .article-body:before{background-image:linear-gradient(180deg,rgba(3,6,10,.05),rgba(3,6,10,.48)),url('https://upload.wikimedia.org/wikipedia/commons/7/78/Knicks_playing_at_Madison_Square_Garden.jpg')}
+.report-document:has(.report-visual img[src*='Fort_Greene']) .article-body:before{background-image:linear-gradient(180deg,rgba(3,6,10,.05),rgba(3,6,10,.48)),url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Fort_Greene_Parkhouse_jeh.JPG/1280px-Fort_Greene_Parkhouse_jeh.JPG')}
+.report-document:has(.report-visual img[src*='Stock_Exchange']) .article-body:before{background-image:linear-gradient(180deg,rgba(3,6,10,.05),rgba(3,6,10,.48)),url('https://upload.wikimedia.org/wikipedia/commons/0/03/Floor_of_Toronto_Stock_Exchange_1956.jpg')}
 
-/* Homepage/editorial cards: larger, more visual, less empty canvas. */
-.section{padding:74px 0}
-.trending-wrap{padding:62px 0}
-.rail{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
-.rail-card .art{min-height:260px;border-radius:12px}
-.latest-grid{gap:24px}
-.story .art{border-radius:14px}
+/* Homepage/editorial cards: visually active but compact. */
+.section{padding:68px 0}
+.trending-wrap{padding:54px 0}
+.rail{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.rail-card .art{min-height:220px;border-radius:10px}
+.latest-grid{gap:20px}
+.story .art{border-radius:12px}
 
 @media(max-width:1050px){
-  .archive-card,.archive-card:nth-child(1),.archive-card:nth-child(7n+1),.archive-card:nth-child(2),.archive-card:nth-child(7n+2){grid-column:span 6}
-  .archive-card .art,.archive-card:nth-child(1) .art,.archive-card:nth-child(7n+1) .art{min-height:310px}
-  .report-visual .art{min-height:470px}
+  .archive-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 20px}
+  .archive-card .art,.archive-card:nth-child(1) .art,.archive-card:nth-child(7n+1) .art{height:190px;min-height:190px}
+  .archive-card .art:not(:has(.art-photo)){height:78px;min-height:78px}
+  .report-visual .art{min-height:420px}
 }
 @media(max-width:700px){
   .shell{width:min(100% - 24px,1440px)}
-  .archive-grid{display:block}
-  .archive-card{margin-bottom:28px}
-  .archive-card .art,.archive-card:nth-child(1) .art,.archive-card:nth-child(7n+1) .art{min-height:260px}
+  .archive-grid{grid-template-columns:1fr;gap:22px}
+  .archive-card{margin:0}
+  .archive-card .art,.archive-card:nth-child(1) .art,.archive-card:nth-child(7n+1) .art{height:210px;min-height:210px}
+  .archive-card .art:not(:has(.art-photo)){height:70px;min-height:70px}
   .report-document>.eyebrow,.report-document>h1,.report-document>.article-deck,.article-body{width:100%}
-  .report-visual .art{min-height:330px;border-radius:12px}
-  .article-body figure,.article-body .wp-block-image{margin:22px 0 26px}
-  .report-document .article-body:before{width:100%;height:220px;margin:4px 0 24px}
-  .article-body{font-size:16px;line-height:1.68}
+  .report-visual .art{min-height:300px;border-radius:10px}
+  .article-body figure,.article-body .wp-block-image{margin:20px 0 22px}
+  .report-document .article-body:before{width:100%;height:190px;margin:4px 0 20px}
+  .article-body{font-size:16px;line-height:1.64}
 }
