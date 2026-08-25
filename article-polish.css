@@ -1,0 +1,20 @@
+/* Article density + inline photography correction */
+.interior{padding-top:52px;padding-bottom:84px}
+.back-link{margin-bottom:28px}
+.report-document{width:min(1040px,100%)}
+.report-visual{margin-bottom:28px}
+.report-visual .art{min-height:420px}
+.document>h1{max-width:940px;font-size:clamp(48px,5.7vw,78px);margin:14px 0 18px}
+.article-deck{max-width:900px;font-size:22px;margin:0 0 26px;padding-bottom:24px}
+.article-body{width:min(860px,100%);font-size:17px;line-height:1.72}
+.article-body p,.article-body ul,.article-body ol{margin:0 0 19px}
+.article-body h2{font-size:40px;margin:40px 0 16px}
+.article-body h3{font-size:30px;margin:31px 0 13px}
+.article-body blockquote{margin:28px 0;padding:18px 24px;border-left:2px solid rgba(62,228,225,.55);background:rgba(255,255,255,.025)}
+.rr-inline-photo{margin:28px 0 30px;width:min(1040px,calc(100vw - 40px));position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:#0a0d12}
+.rr-inline-photo img{display:block;width:100%;height:clamp(260px,38vw,470px);object-fit:cover;filter:saturate(.88) contrast(1.04)}
+.rr-inline-photo:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 58%,rgba(4,7,11,.68));pointer-events:none}
+.rr-inline-photo figcaption{position:absolute;z-index:2;left:16px;bottom:12px;color:#c9ced6;font:9px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;background:rgba(5,8,12,.62);padding:7px 9px;backdrop-filter:blur(4px)}
+.article-body img:not(.rr-inline-photo img){max-width:100%;height:auto;margin:20px 0}
+@media(min-width:900px){.rr-inline-photo{margin-left:-90px}}
+@media(max-width:640px){.interior{padding-top:38px;padding-bottom:64px}.back-link{margin-bottom:20px}.report-visual{margin-bottom:20px}.report-visual .art{min-height:300px}.document>h1{font-size:44px}.article-deck{font-size:20px;margin-bottom:20px;padding-bottom:20px}.article-body{font-size:16px;line-height:1.68}.article-body p,.article-body ul,.article-body ol{margin-bottom:17px}.article-body h2{font-size:33px;margin-top:31px}.rr-inline-photo{margin:24px 0}.rr-inline-photo img{height:260px}}
