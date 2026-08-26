@@ -18,6 +18,7 @@ type PageData = { title: string; content: string };
 
 const API = 'https://public-api.wordpress.com/wp/v2/sites/256820440';
 const SUMMARY_FIELDS = 'id,slug,date,title,excerpt,categories';
+const IMAGE_CACHE_VERSION = 'rr-img-v2-';
 const categories: Record<number, { name: string; slug: string }> = {
   28598973: { name: 'Culture', slug: 'culture-pie' },
   299401: { name: 'Media & Culture', slug: 'media-culture' },
@@ -37,7 +38,6 @@ const fixedImages: Record<string, ImageRef> = {
 };
 
 const imageCache = new Map<string, ImageRef>();
-const claimed = new Set<string>();
 const cleanText = (html = '') => new DOMParser().parseFromString(html, 'text/html').body.textContent?.trim() || '';
 const cleanHtml = (html = '') => {
   const doc = new DOMParser().parseFromString(html, 'text/html');
@@ -63,34 +63,46 @@ function hash(input: string) {
   for (let i = 0; i < input.length; i++) value = ((value << 5) - value + input.charCodeAt(i)) | 0;
   return Math.abs(value);
 }
-function searchTerms(post: Post) {
-  const raw = post.title.replace(/RADIENT SCREEN #\d+|Who|What|When|Why|How|The|Is|Are|Just|Your|Can|Into|That|This/gi, ' ');
-  return raw.replace(/[^a-z0-9\s]/gi, ' ').replace(/\s+/g, ' ').trim().split(' ').slice(0, 6).join(' ');
+const imageStopWords = new Set(['the','and','that','this','with','from','into','your','their','they','them','who','what','when','where','why','how','are','was','were','has','have','had','can','could','would','should','just','more','less','than','then','about','inside','outside','after','before','does','did','for','its','our','new','report','review','radient']);
+function imageKeywords(post: Post) {
+  const words = post.title.toLowerCase().replace(/radient screen #\d+/g, ' ').replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(word => word.length >= 3 && !imageStopWords.has(word));
+  return [...new Set(words)].slice(0, 7);
+}
+function candidateScore(page: any, keywords: string[]) {
+  const title = String(page.title || '').replace(/^File:/i, '').toLowerCase().replace(/[^a-z0-9\s]/g, ' ');
+  if (/\b(logo|icon|diagram|chart|coat of arms|flag|seal|screenshot|scan|symbol)\b/i.test(title)) return -1;
+  let score = 0;
+  keywords.forEach((word, index) => {
+    if (title.includes(word)) score += Math.max(2, 7 - index);
+  });
+  if (keywords.length >= 2 && title.includes(`${keywords[0]} ${keywords[1]}`)) score += 8;
+  return score;
 }
 async function resolveImage(post: Post): Promise<ImageRef | null> {
   if (fixedImages[post.slug]) return fixedImages[post.slug];
   if (imageCache.has(post.slug)) return imageCache.get(post.slug)!;
-  const cached = sessionStorage.getItem(`rr-img-${post.slug}`);
+  const cacheKey = `${IMAGE_CACHE_VERSION}${post.slug}`;
+  const cached = sessionStorage.getItem(cacheKey);
   if (cached) {
     const parsed = JSON.parse(cached) as ImageRef;
-    imageCache.set(post.slug, parsed); claimed.add(parsed.src); return parsed;
+    imageCache.set(post.slug, parsed);
+    return parsed;
   }
   try {
-    const query = encodeURIComponent(searchTerms(post) || post.category);
-    const response = await fetch(`https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${query}&gsrnamespace=6&gsrlimit=8&prop=imageinfo&iiprop=url&iiurlwidth=900&format=json&origin=*`);
+    const keywords = imageKeywords(post);
+    if (!keywords.length) return null;
+    const query = encodeURIComponent(keywords.join(' '));
+    const response = await fetch(`https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${query}&gsrnamespace=6&gsrlimit=12&prop=imageinfo&iiprop=url&iiurlwidth=900&format=json&origin=*`);
     const data = await response.json();
     const choices = Object.values<any>(data.query?.pages || {}).filter((page: any) => page.imageinfo?.[0]?.thumburl || page.imageinfo?.[0]?.url);
     if (!choices.length) return null;
-    const start = hash(post.slug) % choices.length;
-    let selected = choices[start];
-    for (let offset = 0; offset < choices.length; offset++) {
-      const candidate = choices[(start + offset) % choices.length];
-      const src = candidate.imageinfo?.[0]?.thumburl || candidate.imageinfo?.[0]?.url;
-      if (!claimed.has(src)) { selected = candidate; break; }
-    }
+    const ranked = choices.map((page: any, index: number) => ({ page, index, score: candidateScore(page, keywords) })).filter(item => item.score >= 2).sort((a, b) => b.score - a.score || a.index - b.index);
+    if (!ranked.length) return null;
+    const selected = ranked[0].page;
     const src = selected.imageinfo?.[0]?.thumburl || selected.imageinfo?.[0]?.url;
     const result = { src, credit: 'Wikimedia Commons' };
-    claimed.add(src); imageCache.set(post.slug, result); sessionStorage.setItem(`rr-img-${post.slug}`, JSON.stringify(result));
+    imageCache.set(post.slug, result);
+    sessionStorage.setItem(cacheKey, JSON.stringify(result));
     return result;
   } catch { return null; }
 }
@@ -99,8 +111,9 @@ function ArticleImage({ post, priority = false, compact = false }: { post: Post;
   const [image, setImage] = useState<ImageRef | null>(fixedImages[post.slug] || null);
   useEffect(() => {
     let active = true;
+    setImage(fixedImages[post.slug] || null);
     if (fixedImages[post.slug]) return () => { active = false; };
-    const run = () => resolveImage(post).then(result => active && result && setImage(result));
+    const run = () => resolveImage(post).then(result => active && setImage(result));
     if (priority) run();
     else {
       const id = window.setTimeout(run, 650);
