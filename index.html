@@ -10,15 +10,15 @@
     <link rel="preconnect" href="https://public-api.wordpress.com" crossorigin />
     <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/article-polish.css" />
-    <link rel="stylesheet" href="/src/editorial-overrides.css" />
+    <link rel="stylesheet" href="./article-polish.css" />
+    <link rel="stylesheet" href="./src/editorial-overrides.css" />
     <title>The Radient Review</title>
   </head>
   <body>
     <div id="root"></div>
     <script>
       (() => {
-        const build = 'rr-2026-08-26-images-v2';
+        const build = 'rr-2026-08-26-pages-path-v3';
         if (sessionStorage.getItem('radient-build') !== build) {
           Object.keys(sessionStorage)
             .filter(key => key.startsWith('radient-'))
@@ -27,7 +27,7 @@
         }
       })();
     </script>
-    <script type="module" src="/src/main.tsx"></script>
-    <script type="module" src="/article-polish.js"></script>
+    <script type="module" src="./src/main.tsx"></script>
+    <script type="module" src="./article-polish.js"></script>
   </body>
 </html>
