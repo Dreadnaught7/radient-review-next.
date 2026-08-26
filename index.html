@@ -14,21 +14,6 @@
   </head>
   <body>
     <div id="root"></div>
-    <script>
-      (() => {
-        const build = 'rr-2026-08-26-structural-gap-v7';
-        if (sessionStorage.getItem('radient-build') !== build) {
-          Object.keys(sessionStorage)
-            .filter(key => key.startsWith('radient-'))
-            .forEach(key => sessionStorage.removeItem(key));
-          sessionStorage.setItem('radient-build', build);
-        }
-      })();
-    </script>
     <script type="module" src="./src/main.tsx"></script>
-    <script defer src="%BASE_URL%article-images.js"></script>
-    <!-- Load corrective layers after Vite's bundled stylesheet. -->
-    <link rel="stylesheet" href="%BASE_URL%site-overrides.css" />
-    <link rel="stylesheet" href="%BASE_URL%structural-fix.css" />
   </body>
 </html>
