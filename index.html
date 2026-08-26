@@ -16,6 +16,17 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      (() => {
+        const build = 'rr-2026-08-26-images-v2';
+        if (sessionStorage.getItem('radient-build') !== build) {
+          Object.keys(sessionStorage)
+            .filter(key => key.startsWith('radient-'))
+            .forEach(key => sessionStorage.removeItem(key));
+          sessionStorage.setItem('radient-build', build);
+        }
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
     <script type="module" src="/article-polish.js"></script>
   </body>
