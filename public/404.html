@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Redirecting · The Radient Review</title>
+  <script>
+    (() => {
+      const path = window.location.pathname.replace(/^\/+|\/+$/g, '');
+      const query = window.location.search || '';
+      const staticPages = new Set(['about','support','research-services','request-a-report','submit']);
+      let route = '';
+
+      if (!path) route = '#/';
+      else if (path === 'reports' || path === 'archive') route = '#/archive';
+      else if (path === 'topics') route = '#/topics';
+      else if (staticPages.has(path)) route = `#/page/${encodeURIComponent(path)}`;
+      else route = `#/report/${encodeURIComponent(path.split('/').filter(Boolean).pop() || '')}`;
+
+      window.location.replace(`${window.location.origin}/${route}${query}`);
+    })();
+  </script>
+</head>
+<body></body>
+</html>
