@@ -16,7 +16,7 @@
     <div id="root"></div>
     <script>
       (() => {
-        const build = 'rr-2026-08-26-cascade-v5';
+        const build = 'rr-2026-08-26-unique-images-v6';
         if (sessionStorage.getItem('radient-build') !== build) {
           Object.keys(sessionStorage)
             .filter(key => key.startsWith('radient-'))
@@ -26,6 +26,7 @@
       })();
     </script>
     <script type="module" src="./src/main.tsx"></script>
+    <script defer src="%BASE_URL%article-images.js"></script>
     <!-- Load layout overrides after Vite injects the bundled base stylesheet so the intended rules win the cascade. -->
     <link rel="stylesheet" href="%BASE_URL%site-overrides.css" />
   </body>
