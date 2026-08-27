@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "generate:rss": "node scripts/generate-rss.mjs",
-    "build": "npm run generate:rss && vite build",
+    "patch:featured-images": "node scripts/patch-featured-images.mjs",
+    "build": "npm run patch:featured-images && npm run generate:rss && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
