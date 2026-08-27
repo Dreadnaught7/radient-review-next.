@@ -27,6 +27,14 @@ replaceOnce(
   'editorial comment',
 );
 
+// Insert the async featured-media fallback BEFORE rewriting the toPost declaration.
+// hydratePost may reference toPost declared later because it is only executed after module initialization.
+replaceOnce(
+  `const toPost = (item: any): Post => {`,
+  `const hydratePost = async (item: any): Promise<Post> => {\n  const post = toPost(item);\n  if (post.image || !item?.featured_media) return post;\n  try {\n    const response = await fetch(\`${'${API}'}/media/${'${item.featured_media}'}?_fields=source_url,caption\`);\n    if (!response.ok) return post;\n    const media = await response.json();\n    if (!media?.source_url) return post;\n    return { ...post, image: { src: media.source_url, credit: cleanText(media?.caption?.rendered || '') || 'The Radient Review' } };\n  } catch {\n    return post;\n  }\n};\nconst toPost = (item: any): Post => {`,
+  'featured media fallback hydrator',
+);
+
 replaceOnce(
   `const toPost = (item: any): Post => {\n  const category = categories[item.categories?.[0]] || { name: 'The Radient Review', slug: 'uncategorized' };\n  return {`,
   `const getFeaturedImage = (item: any): ImageRef | undefined => {\n  const media = item?._embedded?.['wp:featuredmedia']?.[0];\n  if (!media?.source_url) return undefined;\n  return { src: media.source_url, credit: cleanText(media?.caption?.rendered || '') || 'The Radient Review' };\n};\nconst toPost = (item: any): Post => {\n  const category = categories[item.categories?.[0]] || { name: 'The Radient Review', slug: 'uncategorized' };\n  const image = getFeaturedImage(item);\n  return {`,
@@ -61,12 +69,6 @@ replaceOnce(
   `fetch(\`${'${API}'}/posts?slug=${'${encodeURIComponent(slug)}'}&_fields=id,slug,date,title,excerpt,content,categories\`)`,
   `fetch(\`${'${API}'}/posts?slug=${'${encodeURIComponent(slug)}'}&_embed=wp:featuredmedia&_fields=id,slug,date,title,excerpt,content,categories,featured_media,_links,_embedded\`)`,
   'report embed',
-);
-
-replaceOnce(
-  `const toPost = (item: any): Post => {`,
-  `const hydratePost = async (item: any): Promise<Post> => {\n  const post = toPost(item);\n  if (post.image || !item?.featured_media) return post;\n  try {\n    const response = await fetch(\`${'${API}'}/media/${'${item.featured_media}'}?_fields=source_url,caption\`);\n    if (!response.ok) return post;\n    const media = await response.json();\n    if (!media?.source_url) return post;\n    return { ...post, image: { src: media.source_url, credit: cleanText(media?.caption?.rendered || '') || 'The Radient Review' } };\n  } catch {\n    return post;\n  }\n};\nconst toPost = (item: any): Post => {`,
-  'featured media fallback hydrator',
 );
 
 replaceOnce(
