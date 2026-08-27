@@ -63,6 +63,30 @@ replaceOnce(
   'report embed',
 );
 
+replaceOnce(
+  `const toPost = (item: any): Post => {`,
+  `const hydratePost = async (item: any): Promise<Post> => {\n  const post = toPost(item);\n  if (post.image || !item?.featured_media) return post;\n  try {\n    const response = await fetch(\`${'${API}'}/media/${'${item.featured_media}'}?_fields=source_url,caption\`);\n    if (!response.ok) return post;\n    const media = await response.json();\n    if (!media?.source_url) return post;\n    return { ...post, image: { src: media.source_url, credit: cleanText(media?.caption?.rendered || '') || 'The Radient Review' } };\n  } catch {\n    return post;\n  }\n};\nconst toPost = (item: any): Post => {`,
+  'featured media fallback hydrator',
+);
+
+replaceOnce(
+  `.then(items => setPosts(items.map(toPost)))`,
+  `.then(async items => setPosts(await Promise.all(items.map(hydratePost))))`,
+  'home fallback hydration',
+);
+
+replaceOnce(
+  `.then(items => { setPosts(items.map(toPost)); setArchiveLoaded(true); })`,
+  `.then(async items => { setPosts(await Promise.all(items.map(hydratePost))); setArchiveLoaded(true); })`,
+  'archive fallback hydration',
+);
+
+replaceOnce(
+  `.then(items => active && items[0] && setPost(toPost(items[0])))`,
+  `.then(async items => active && items[0] && setPost(await hydratePost(items[0])))`,
+  'report fallback hydration',
+);
+
 // A report with no real featured image must never reserve a giant decorative hero slot.
 replaceOnce(
   `  return <section className="interior shell"><a className="back" href="#/archive">← Back to reports</a><article className="article"><ArticleImage post={post} priority/><header>`,
