@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Commercial Intelligence Intake | The Radient Review</title>
+  <meta name="description" content="Request researched commercial opportunities tied to current public signals.">
+  <style>
+    :root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#000;color:#fff;font-family:Inter,Arial,sans-serif;line-height:1.55}.shell{max-width:920px;margin:0 auto;padding:48px 22px 72px}.eyebrow{font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:#aaa;margin-bottom:14px}.hero{border-bottom:1px solid #262626;padding-bottom:28px;margin-bottom:30px}h1{font-size:clamp(2.4rem,7vw,5.5rem);line-height:.95;margin:0 0 16px;font-weight:800;letter-spacing:-.04em}h2{font-size:1.35rem;margin:0 0 14px}.price{font-size:1.2rem;font-weight:700}.muted{color:#b8b8b8}.card{background:#0d0d0d;border:1px solid #242424;border-radius:16px;padding:24px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.full{grid-column:1/-1}label{display:block;font-size:.92rem;font-weight:700;margin-bottom:7px}input,textarea,select{width:100%;background:#050505;color:#fff;border:1px solid #333;border-radius:10px;padding:12px 13px;font:inherit;outline:none}input:focus,textarea:focus,select:focus{border-color:#fff}textarea{min-height:96px;resize:vertical}.check{display:flex;gap:10px;align-items:flex-start;font-weight:500}.check input{width:auto;margin-top:5px}.btn{width:100%;background:#fff;color:#000;border:0;border-radius:10px;padding:15px 18px;font:inherit;font-weight:800;cursor:pointer}.btn:hover{background:#e7e7e7}.btn:disabled{opacity:.55;cursor:wait}.note{font-size:.86rem;color:#9f9f9f;margin-top:18px}.bullets{display:grid;grid-template-columns:repeat(2,1fr);gap:8px 24px;padding:0;list-style:none}.bullets li:before{content:'✓';margin-right:8px}.status{display:none;margin-top:16px;padding:14px 16px;border:1px solid #333;border-radius:10px}.status.ok{display:block}.status.err{display:block}@media(max-width:700px){.grid,.bullets{grid-template-columns:1fr}.shell{padding-top:32px}.card{padding:18px}}
+  </style>
+</head>
+<body>
+<main class="shell">
+  <section class="hero">
+    <div class="eyebrow">Commercial Intelligence</div>
+    <h1>Find who may need what you sell now.</h1>
+    <p class="price">50 researched commercial opportunities — $500 flat.</p>
+    <p class="muted">Not a scraped contact list. Each opportunity is tied to a current public signal, a qualification rationale, a decision route, and a practical outreach angle.</p>
+    <ul class="bullets"><li>Current signal + date</li><li>Why the need may be current</li><li>Decision-maker route</li><li>Qualification notes</li><li>Priority scoring</li><li>Suggested approach</li></ul>
+  </section>
+
+  <section class="card">
+    <h2>Start your research brief</h2>
+    <p class="muted">Tell us what you sell, where you sell it, and what a worthwhile customer looks like.</p>
+    <form id="intakeForm">
+      <div class="grid">
+        <div><label>Company / Business *</label><input name="company_name" required></div>
+        <div><label>Contact Name</label><input name="contact_name"></div>
+        <div><label>Contact Email *</label><input type="email" name="contact_email" required></div>
+        <div><label>Website</label><input type="url" name="website"></div>
+        <div class="full"><label>What do you sell? *</label><textarea name="service_product" required></textarea></div>
+        <div class="full"><label>Territory / Service Area *</label><textarea name="territory" required></textarea></div>
+        <div class="full"><label>Ideal Customer *</label><textarea name="ideal_customer" required></textarea></div>
+        <div><label>Target Industries</label><textarea name="target_industries"></textarea></div>
+        <div><label>Exclusions / Do Not Target</label><textarea name="exclusions"></textarea></div>
+        <div><label>Priority Signals</label><textarea name="priority_signals" placeholder="New lease, opening, funding, hiring, construction, expansion..."></textarea></div>
+        <div><label>Preferred Decision Makers</label><textarea name="preferred_decision_makers" placeholder="Owner, facilities manager, COO, office manager..."></textarea></div>
+        <div><label>Minimum Company Size / Deal Fit</label><textarea name="minimum_deal_fit"></textarea></div>
+        <div><label>Special Notes</label><textarea name="special_notes"></textarea></div>
+        <div><label>Package</label><select name="package"><option>50 opportunities — $500</option><option>5-opportunity sample</option></select></div>
+        <div><label>Requested Delivery Date</label><input type="date" name="requested_delivery_date"></div>
+        <div class="full" style="position:absolute;left:-9999px"><label>Leave blank</label><input name="company_fax" tabindex="-1" autocomplete="off"></div>
+        <div class="full"><label class="check"><input type="checkbox" name="consent_accuracy_confirmed" value="true" required><span>I confirm this information is accurate enough to begin research.</span></label></div>
+        <div class="full"><button class="btn" id="submitBtn" type="submit">Submit Research Brief</button></div>
+      </div>
+    </form>
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+    <p class="note">Public signals indicate fit and possible current demand; they do not represent confirmed purchasing intent.</p>
+  </section>
+</main>
+<script>
+const ENDPOINT='https://zginbimbiuhzlkbxsemm.supabase.co/functions/v1/commercial-intake';
+const form=document.getElementById('intakeForm');
+const statusBox=document.getElementById('status');
+const submitBtn=document.getElementById('submitBtn');
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  statusBox.className='status';
+  statusBox.textContent='';
+  submitBtn.disabled=true;
+  submitBtn.textContent='Submitting…';
+  try {
+    const body=new FormData(form);
+    const response=await fetch(ENDPOINT,{method:'POST',body});
+    if(!response.ok) throw new Error(await response.text() || 'Submission failed');
+    form.reset();
+    statusBox.className='status ok';
+    statusBox.textContent='Received. Your research brief has been submitted successfully.';
+    statusBox.scrollIntoView({behavior:'smooth',block:'center'});
+  } catch (error) {
+    statusBox.className='status err';
+    statusBox.textContent='Submission failed. Please try again.';
+  } finally {
+    submitBtn.disabled=false;
+    submitBtn.textContent='Submit Research Brief';
+  }
+});
+</script>
+</body>
+</html>
