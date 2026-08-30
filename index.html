@@ -14,6 +14,10 @@
     <style>
       /* Do not reserve a large decorative hero slot on report pages when no real image exists. */
       .article > .media:has(.signal) { display: none; }
+      .pilot-deposit-cta { margin: 2rem 0 0; padding: 1.35rem; border: 1px solid rgba(255,255,255,.16); border-radius: 14px; background: rgba(255,255,255,.04); }
+      .pilot-deposit-cta h2 { margin: 0 0 .55rem; }
+      .pilot-deposit-cta p { margin: 0 0 1rem; }
+      .pilot-deposit-cta a { display: inline-flex; align-items: center; justify-content: center; padding: .8rem 1rem; border-radius: 999px; background: #fff; color: #07090d; font-weight: 700; text-decoration: none; }
     </style>
     <title>The Radient Review</title>
   </head>
@@ -33,10 +37,29 @@
           about ? nav.insertBefore(link, about) : nav.appendChild(link);
           return true;
         };
-        if (!addWorkLink()) {
-          const observer = new MutationObserver(() => { if (addWorkLink()) observer.disconnect(); });
-          observer.observe(document.documentElement, { childList: true, subtree: true });
-        }
+
+        const syncPilotDeposit = () => {
+          const isPilotPage = window.location.hash === '#/page/commercial-cleaning-pilot';
+          const existing = document.querySelector('[data-pilot-deposit]');
+          if (!isPilotPage) {
+            if (existing) existing.remove();
+            return false;
+          }
+          const article = document.querySelector('.static-page');
+          if (!article || existing) return !!existing;
+          const cta = document.createElement('section');
+          cta.className = 'pilot-deposit-cta';
+          cta.setAttribute('data-pilot-deposit', 'true');
+          cta.innerHTML = '<p class="eyebrow accent">PILOT DEPOSIT OPTION</p><h2>Start with a $250 deposit</h2><p>The $250 deposit activates the commercial-cleaning pilot. The remaining $250 is due before release of the complete unredacted deliverable.</p><a href="https://buy.stripe.com/8x29AS46Y2mbg6o3NK0sU05" target="_blank" rel="noopener noreferrer">Pay $250 Deposit</a>';
+          article.appendChild(cta);
+          return true;
+        };
+
+        const sync = () => { addWorkLink(); syncPilotDeposit(); };
+        sync();
+        window.addEventListener('hashchange', sync);
+        const observer = new MutationObserver(sync);
+        observer.observe(document.documentElement, { childList: true, subtree: true });
       })();
     </script>
   </body>
