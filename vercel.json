@@ -1,0 +1,19 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "images": {
+    "sizes": [640, 960, 1600],
+    "remotePatterns": [
+      {
+        "protocol": "https",
+        "hostname": "^zginbimbiuhzlkbxsemm\\.supabase\\.co$",
+        "port": "",
+        "pathname": "^/storage/v1/object/public/radient-media/.*$"
+      }
+    ],
+    "minimumCacheTTL": 86400,
+    "qualities": [75],
+    "formats": ["image/webp"],
+    "dangerouslyAllowSVG": false,
+    "contentDispositionType": "inline"
+  }
+}
