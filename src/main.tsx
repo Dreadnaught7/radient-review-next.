@@ -67,10 +67,13 @@ async function fetchReports(limit = 11, slug?: string, includeContent = false) {
   return (await response.json()).map(toPost) as Post[];
 }
 function hash(input: string) { let value = 0; for (let i = 0; i < input.length; i++) value = ((value << 5) - value + input.charCodeAt(i)) | 0; return Math.abs(value); }
+function optimizedImageUrl(url: string, width: number) { return `/_vercel/image?url=${encodeURIComponent(url)}&w=${width}&q=75`; }
 
 function ArticleImage({ post, priority = false, compact = false }: { post: Post; priority?: boolean; compact?: boolean }) {
+  const displayWidth = priority ? 1600 : compact ? 640 : 960;
+  const src = post.imageUrl ? optimizedImageUrl(post.imageUrl, displayWidth) : undefined;
   return <div className={`media ${compact ? 'media-compact' : ''}`}>
-    {post.imageUrl ? <img src={post.imageUrl} alt={post.imageAlt || ''} width={post.imageWidth} height={post.imageHeight} loading={priority ? 'eager' : 'lazy'} decoding="async" fetchPriority={priority ? 'high' : 'auto'} /> : <div className={`signal signal-${hash(post.slug) % 4}`} />}
+    {src ? <img src={src} alt={post.imageAlt || ''} width={displayWidth} height={Math.round(displayWidth * 9 / 16)} loading={priority ? 'eager' : 'lazy'} decoding="async" fetchPriority={priority ? 'high' : 'auto'} /> : <div className={`signal signal-${hash(post.slug) % 4}`} />}
     <span>{post.category}</span>
   </div>;
 }
