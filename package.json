@@ -1,13 +1,12 @@
 {
   "name": "radient-review-next",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "generate:rss": "node scripts/generate-rss.mjs",
-    "patch:featured-images": "node scripts/patch-featured-images.mjs",
-    "build": "npm run patch:featured-images && npm run generate:rss && vite build",
+    "build": "npm run generate:rss && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
