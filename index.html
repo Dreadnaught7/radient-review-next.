@@ -20,5 +20,24 @@
   <body>
     <div id="root"></div>
     <script type="module" src="./src/main.tsx"></script>
+    <script>
+      (() => {
+        const addWorkLink = () => {
+          const nav = document.querySelector('.site-header nav');
+          if (!nav || nav.querySelector('[data-work-results]')) return false;
+          const link = document.createElement('a');
+          link.href = '/work/';
+          link.textContent = 'Work';
+          link.setAttribute('data-work-results', 'true');
+          const about = [...nav.querySelectorAll('a')].find(a => a.textContent?.trim() === 'About');
+          about ? nav.insertBefore(link, about) : nav.appendChild(link);
+          return true;
+        };
+        if (!addWorkLink()) {
+          const observer = new MutationObserver(() => { if (addWorkLink()) observer.disconnect(); });
+          observer.observe(document.documentElement, { childList: true, subtree: true });
+        }
+      })();
+    </script>
   </body>
 </html>
