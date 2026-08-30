@@ -22,7 +22,7 @@ type PageData = { title: string; content: string };
 
 const WP_API = 'https://public-api.wordpress.com/wp/v2/sites/256820440';
 const SUPABASE_URL = 'https://zginbimbiuhzlkbxsemm.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_5gFYFjCWuGz4xbhi7SD4xQ_dU7NGn4c';
+const SUPABASE_KEY = 'sb_publishable_L53gFj_uCk0SQ8gdyG6PGw_GafBiZ78';
 const REPORT_FIELDS = 'id,slug,title,excerpt,content_html,published_at,category_names,featured_image_url,featured_image_alt,featured_image_width,featured_image_height,image_quality,sort_rank';
 
 const cleanText = (html = '') => new DOMParser().parseFromString(html, 'text/html').body.textContent?.trim() || '';
