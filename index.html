@@ -11,8 +11,8 @@
     <link rel="preconnect" href="https://public-api.wordpress.com" crossorigin />
     <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/premium.css" />
     <style>
-      /* Do not reserve a large decorative hero slot on report pages when no real image exists. */
       .article > .media:has(.signal) { display: none; }
       .pilot-deposit-cta { margin: 2rem 0 0; padding: 1.35rem; border: 1px solid rgba(255,255,255,.16); border-radius: 14px; background: rgba(255,255,255,.04); }
       .pilot-deposit-cta h2 { margin: 0 0 .55rem; }
@@ -26,6 +26,16 @@
     <script type="module" src="./src/main.tsx"></script>
     <script>
       (() => {
+        const routeName = () => (window.location.hash || '#/').replace(/^#\/?/, '') || 'home';
+        const syncRoute = () => {
+          const route = routeName();
+          if (route === 'page/research-services') {
+            window.location.replace('#/services');
+            return;
+          }
+          document.body.dataset.route = route;
+        };
+
         const addWorkLink = () => {
           const nav = document.querySelector('.site-header nav');
           if (!nav || nav.querySelector('[data-work-results]')) return false;
@@ -55,7 +65,7 @@
           return true;
         };
 
-        const sync = () => { addWorkLink(); syncPilotDeposit(); };
+        const sync = () => { syncRoute(); addWorkLink(); syncPilotDeposit(); };
         sync();
         window.addEventListener('hashchange', sync);
         const observer = new MutationObserver(sync);
