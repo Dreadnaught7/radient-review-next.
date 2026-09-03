@@ -6,154 +6,37 @@
   <meta name="robots" content="noindex,nofollow" />
   <title>Consonance Ambassador Intake</title>
   <style>
-    :root{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#111;background:#f6f6f3}
-    *{box-sizing:border-box} body{margin:0} main{max-width:820px;margin:0 auto;padding:40px 18px 64px}
-    .card{background:#fff;border:1px solid #ddd;border-radius:18px;padding:28px;box-shadow:0 8px 30px rgba(0,0,0,.05)}
-    .eyebrow{font-size:.78rem;letter-spacing:.16em;font-weight:800;margin:0 0 8px}.badge{display:none;width:max-content;max-width:100%;border:1px solid #bbb;border-radius:999px;padding:8px 12px;margin:14px 0 22px;font-size:.9rem}
-    h1{font-size:clamp(2rem,6vw,4.2rem);line-height:.95;margin:.2em 0 .35em} .intro{font-size:1.05rem;line-height:1.55;color:#444;margin-bottom:28px}
-    form{display:grid;gap:16px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}label{display:grid;gap:7px;font-size:.92rem;font-weight:700}
-    input,select,textarea{width:100%;font:inherit;padding:12px 13px;border:1px solid #bbb;border-radius:9px;background:#fff;color:#111}textarea{resize:vertical;min-height:145px}
-    button{border:0;border-radius:10px;padding:14px 18px;background:#111;color:#fff;font:inherit;font-weight:800;cursor:pointer}button[disabled]{opacity:.6;cursor:wait}
-    #status{min-height:1.3em;margin:0;font-size:.95rem}.fine{font-size:.8rem;color:#666;line-height:1.5;margin-top:18px}.error{color:#9c1c1c}.success{color:#176b37}
-    @media(max-width:640px){main{padding-top:20px}.card{padding:20px}.grid{grid-template-columns:1fr}}
+    :root{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#111;background:#f6f6f3}*{box-sizing:border-box}body{margin:0}main{max-width:820px;margin:0 auto;padding:40px 18px 64px}.card{background:#fff;border:1px solid #ddd;border-radius:18px;padding:28px;box-shadow:0 8px 30px rgba(0,0,0,.05)}.eyebrow{font-size:.78rem;letter-spacing:.16em;font-weight:800;margin:0 0 8px}.badge{display:none;width:max-content;max-width:100%;border:1px solid #bbb;border-radius:999px;padding:8px 12px;margin:14px 0 22px;font-size:.9rem}h1{font-size:clamp(2rem,6vw,4.2rem);line-height:.95;margin:.2em 0 .35em}.intro{font-size:1.05rem;line-height:1.55;color:#444;margin-bottom:28px}form{display:grid;gap:16px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}label{display:grid;gap:7px;font-size:.92rem;font-weight:700}input,select,textarea{width:100%;font:inherit;padding:12px 13px;border:1px solid #bbb;border-radius:9px;background:#fff;color:#111}textarea{resize:vertical;min-height:145px}button{border:0;border-radius:10px;padding:14px 18px;background:#111;color:#fff;font:inherit;font-weight:800;cursor:pointer}button[disabled]{opacity:.6;cursor:wait}#status{min-height:1.3em;margin:0;font-size:.95rem}.fine{font-size:.8rem;color:#666;line-height:1.5;margin-top:18px}.error{color:#9c1c1c}.success{color:#176b37}@media(max-width:640px){main{padding-top:20px}.card{padding:20px}.grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-<main>
-  <section class="card">
-    <p class="eyebrow">CONSONANCE</p>
-    <h1>Tell us what you need.</h1>
-    <p class="intro">Describe the problem, objective, or intelligence need. Referral attribution is preserved for the ambassador who introduced you.</p>
-    <div id="referralBadge" class="badge"></div>
-
-    <form id="intakeForm" novalidate>
-      <input type="hidden" name="ref" id="refField" />
-      <input type="hidden" name="channel" id="channelField" />
-      <input type="hidden" name="campaign" id="campaignField" />
-      <input type="hidden" name="referral_token" id="referralTokenField" />
-      <input type="hidden" name="idempotency_key" id="idempotencyField" />
-      <input type="hidden" name="preferred_contact" value="email" />
-
-      <div class="grid">
-        <label>Name<input required name="full_name" autocomplete="name" /></label>
-        <label>Email<input required type="email" name="email" autocomplete="email" /></label>
-      </div>
-      <div class="grid">
-        <label>Company / Organization<input name="company" autocomplete="organization" /></label>
-        <label>Website<input type="url" name="website" placeholder="https://" inputmode="url" /></label>
-      </div>
-      <div class="grid">
-        <label>Country / Jurisdiction<input name="country_jurisdiction" autocomplete="country-name" /></label>
-        <label>Service
-          <select required name="service_slug" id="serviceField">
-            <option value="">Select a service</option>
-            <option value="commercial-intelligence">Commercial Intelligence</option>
-            <option value="business-organization">Business Organization</option>
-            <option value="executive-production-intelligence">Executive Production Intelligence</option>
-            <option value="company-research">Company Research</option>
-            <option value="market-mapping">Market Mapping</option>
-            <option value="competitive-analysis">Competitive Analysis</option>
-            <option value="lead-qualification">Lead Qualification</option>
-            <option value="executive-intelligence">Executive Intelligence</option>
-            <option value="research-reports">Research Reports</option>
-            <option value="operational-analysis">Operational Analysis</option>
-            <option value="content-intelligence">Content Intelligence</option>
-          </select>
-        </label>
-      </div>
-      <label>Problem / Goal<textarea required name="problem_goal"></textarea></label>
-      <div class="grid">
-        <label>Budget
-          <select name="budget_band">
-            <option value="">Select</option><option>Under $500</option><option>$500–$1,500</option><option>$1,500–$5,000</option><option>$5,000–$15,000</option><option>$15,000+</option>
-          </select>
-        </label>
-        <label>Timeline
-          <select name="timeline">
-            <option value="">Select</option><option>Urgent / 48 hours</option><option>Within 1 week</option><option>Within 1 month</option><option>Planning / exploratory</option>
-          </select>
-        </label>
-      </div>
-      <button id="submitButton" type="submit">Submit intake</button>
-      <p id="status" aria-live="polite"></p>
-    </form>
-    <p class="fine">Submitting this intake does not obligate you to purchase. Ambassador commissions apply only to qualifying collected revenue.</p>
-  </section>
-</main>
+<main><section class="card">
+  <p class="eyebrow">CONSONANCE</p>
+  <h1>Tell us what you need.</h1>
+  <p class="intro">Describe the problem, objective, or intelligence need. Referral attribution is preserved for the ambassador who introduced you.</p>
+  <div id="referralBadge" class="badge"></div>
+  <form id="intakeForm" novalidate>
+    <input type="hidden" name="ref" id="refField" /><input type="hidden" name="channel" id="channelField" /><input type="hidden" name="campaign" id="campaignField" /><input type="hidden" name="referral_token" id="referralTokenField" /><input type="hidden" name="idempotency_key" id="idempotencyField" /><input type="hidden" name="preferred_contact" value="email" />
+    <div class="grid"><label>Name<input required name="full_name" autocomplete="name" /></label><label>Email<input required type="email" name="email" autocomplete="email" /></label></div>
+    <div class="grid"><label>Company / Organization<input name="company" autocomplete="organization" /></label><label>Website<input type="url" name="website" placeholder="https://" inputmode="url" /></label></div>
+    <div class="grid"><label>Country / Jurisdiction<input name="country_jurisdiction" autocomplete="country-name" /></label><label>Service<select required name="service_slug" id="serviceField"><option value="">Select a service</option><option value="commercial-intelligence">Commercial Intelligence</option><option value="business-organization">Business Organization</option><option value="executive-production-intelligence">Executive Production Intelligence</option><option value="company-research">Company Research</option><option value="market-mapping">Market Mapping</option><option value="competitive-analysis">Competitive Analysis</option><option value="lead-qualification">Lead Qualification</option><option value="executive-intelligence">Executive Intelligence</option><option value="research-reports">Research Reports</option><option value="operational-analysis">Operational Analysis</option><option value="content-intelligence">Content Intelligence</option></select></label></div>
+    <label>Problem / Goal<textarea required name="problem_goal"></textarea></label>
+    <div class="grid"><label>Budget<select name="budget_band"><option value="">Select</option><option>Under $500</option><option>$500–$1,500</option><option>$1,500–$5,000</option><option>$5,000–$15,000</option><option>$15,000+</option></select></label><label>Timeline<select name="timeline"><option value="">Select</option><option>Urgent / 48 hours</option><option>Within 1 week</option><option>Within 1 month</option><option>Planning / exploratory</option></select></label></div>
+    <button id="submitButton" type="submit">Submit intake</button><p id="status" aria-live="polite"></p>
+  </form>
+  <p class="fine">Submitting this intake does not obligate you to purchase. Ambassador commissions apply only to qualifying collected revenue.</p>
+</section></main>
 <script>
 (() => {
-  const API = 'https://gvpbolcmawwjufuvjmqa.supabase.co/functions/v1/ambassador-intake';
-  const params = new URLSearchParams(location.search);
-  const ref = (params.get('ref') || '').toLowerCase();
-  const channel = params.get('channel') || 'ambassador';
-  const campaign = params.get('campaign') || '';
-  const service = params.get('service') || '';
-  const names = { kajuan: 'Kajuan', shan: 'Cap' };
-  const tokenKey = 'consonance_referral_token';
-
-  document.getElementById('refField').value = ref;
-  document.getElementById('channelField').value = channel;
-  document.getElementById('campaignField').value = campaign;
-  if (service) document.getElementById('serviceField').value = service;
-
-  if (names[ref]) {
-    const badge = document.getElementById('referralBadge');
-    badge.textContent = `Referred by ${names[ref]}`;
-    badge.style.display = 'block';
-  }
-
-  const existingToken = localStorage.getItem(tokenKey);
-  if (existingToken) document.getElementById('referralTokenField').value = existingToken;
-
-  const landing = new URLSearchParams(params);
-  if (existingToken) landing.set('referral_token', existingToken);
-  fetch(`${API}?${landing.toString()}`, { headers: { accept: 'application/json' }, cache: 'no-store' })
-    .then(r => r.ok ? r.json() : Promise.reject())
-    .then(d => {
-      if (d.referral_token) {
-        localStorage.setItem(tokenKey, d.referral_token);
-        document.getElementById('referralTokenField').value = d.referral_token;
-      }
-    })
-    .catch(() => {});
-
-  const form = document.getElementById('intakeForm');
-  const status = document.getElementById('status');
-  const button = document.getElementById('submitButton');
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    status.className = '';
-    if (!form.reportValidity()) return;
-
-    let idem = document.getElementById('idempotencyField').value;
-    if (!idem) {
-      idem = crypto.randomUUID();
-      document.getElementById('idempotencyField').value = idem;
-    }
-
-    button.disabled = true;
-    status.textContent = 'Submitting…';
-    try {
-      const body = Object.fromEntries(new FormData(form).entries());
-      const response = await fetch(API, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json', accept: 'application/json' },
-        body: JSON.stringify(body)
-      });
-      const data = await response.json();
-      if (!response.ok || !data.ok) throw new Error(data.error || 'Unable to submit');
-      if (data.referral_token) localStorage.setItem(tokenKey, data.referral_token);
-      status.className = 'success';
-      status.textContent = `Intake received. Reference: ${data.intake_reference}`;
-      button.textContent = 'Submitted';
-    } catch (err) {
-      status.className = 'error';
-      status.textContent = 'Submission was not confirmed. Your information was not intentionally duplicated; please try again.';
-      button.disabled = false;
-    }
-  });
+  const API='https://gvpbolcmawwjufuvjmqa.supabase.co/functions/v1/ambassador-intake';
+  const params=new URLSearchParams(location.search);const ref=(params.get('ref')||'').toLowerCase();const channel=params.get('channel')||'ambassador';const campaign=params.get('campaign')||'';const service=params.get('service')||'';const names={kajuan:'Kajuan',shan:'Cap'};const tokenKey='consonance_referral_token';
+  const badge=document.getElementById('referralBadge');const showBadge=(slug)=>{const name=names[slug];if(!name){badge.style.display='none';return}badge.textContent=`Referred by ${name}`;badge.style.display='block'};
+  document.getElementById('refField').value=ref;document.getElementById('channelField').value=channel;document.getElementById('campaignField').value=campaign;if(service)document.getElementById('serviceField').value=service;
+  const existingToken=localStorage.getItem(tokenKey);if(existingToken)document.getElementById('referralTokenField').value=existingToken;
+  const landing=new URLSearchParams(params);if(existingToken)landing.set('referral_token',existingToken);
+  fetch(`${API}?${landing.toString()}`,{headers:{accept:'application/json'},cache:'no-store'}).then(r=>r.ok?r.json():Promise.reject()).then(d=>{if(d.referral_token){localStorage.setItem(tokenKey,d.referral_token);document.getElementById('referralTokenField').value=d.referral_token}showBadge((d.ambassador||ref||'').toLowerCase())}).catch(()=>showBadge(ref));
+  const form=document.getElementById('intakeForm'),status=document.getElementById('status'),button=document.getElementById('submitButton');
+  form.addEventListener('submit',async(e)=>{e.preventDefault();status.className='';if(!form.reportValidity())return;let idem=document.getElementById('idempotencyField').value;if(!idem){idem=crypto.randomUUID();document.getElementById('idempotencyField').value=idem}button.disabled=true;status.textContent='Submitting…';try{const body=Object.fromEntries(new FormData(form).entries());const response=await fetch(API,{method:'POST',headers:{'content-type':'application/json',accept:'application/json'},body:JSON.stringify(body)});const data=await response.json();if(!response.ok||!data.ok)throw new Error(data.error||'Unable to submit');if(data.referral_token)localStorage.setItem(tokenKey,data.referral_token);status.className='success';status.textContent=`Intake received. Reference: ${data.intake_reference}`;button.textContent='Submitted'}catch(err){status.className='error';status.textContent='Submission was not confirmed. Your information was not intentionally duplicated; please try again.';button.disabled=false}});
 })();
 </script>
-</body>
-</html>
+</body></html>
