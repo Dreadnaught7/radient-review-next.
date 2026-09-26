@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 
 const API = 'https://public-api.wordpress.com/wp/v2/sites/256820440';
-const SITE = 'https://theradientreview.com';
+const SITE = 'https://www.consonanceintelligence.com/radient-review';
 const FEED = `${SITE}/feed.xml`;
 const OUTPUT = new URL('../public/feed.xml', import.meta.url);
 
